@@ -1,0 +1,107 @@
+import { useState, useEffect, useMemo } from "react";
+import Papa from "papaparse";
+import type { Deal } from "@/types/deal";
+
+export interface Filters {
+  search: string;
+  sales_agent: string;
+  manager: string;
+  regional_office: string;
+  product: string;
+  deal_stage: string;
+  priority_label: string;
+}
+
+const emptyFilters: Filters = {
+  search: "",
+  sales_agent: "",
+  manager: "",
+  regional_office: "",
+  product: "",
+  deal_stage: "",
+  priority_label: "",
+};
+
+export function useDeals() {
+  const [deals, setDeals] = useState<Deal[]>([]);
+  const [filters, setFilters] = useState<Filters>(emptyFilters);
+  const [sortAsc, setSortAsc] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Papa.parse("/data/ranked_open_deals_final.csv", {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete(results) {
+        const parsed = (results.data as Record<string, string>[]).map((r) => ({
+          ...r,
+          priority_score: parseFloat(r.priority_score) || 0,
+        })) as Deal[];
+        setDeals(parsed);
+        setLoading(false);
+      },
+    });
+  }, []);
+
+  const filterOptions = useMemo(() => {
+    const unique = (key: keyof Deal) =>
+      [...new Set(deals.map((d) => d[key] as string).filter(Boolean))].sort();
+    return {
+      sales_agent: unique("sales_agent"),
+      manager: unique("manager"),
+      regional_office: unique("regional_office"),
+      product: unique("product"),
+      deal_stage: unique("deal_stage"),
+      priority_label: unique("priority_label"),
+    };
+  }, [deals]);
+
+  const filtered = useMemo(() => {
+    let result = deals;
+
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      result = result.filter(
+        (d) =>
+          d.account?.toLowerCase().includes(q) ||
+          d.opportunity_id?.toLowerCase().includes(q) ||
+          d.sales_agent?.toLowerCase().includes(q)
+      );
+    }
+
+    const keys: (keyof Filters)[] = [
+      "sales_agent",
+      "manager",
+      "regional_office",
+      "product",
+      "deal_stage",
+      "priority_label",
+    ];
+    for (const k of keys) {
+      if (filters[k]) {
+        result = result.filter((d) => d[k as keyof Deal] === filters[k]);
+      }
+    }
+
+    result = [...result].sort((a, b) =>
+      sortAsc
+        ? a.priority_score - b.priority_score
+        : b.priority_score - a.priority_score
+    );
+
+    return result;
+  }, [deals, filters, sortAsc]);
+
+  return {
+    deals: filtered,
+    allDeals: deals,
+    filters,
+    setFilters,
+    sortAsc,
+    setSortAsc,
+    filterOptions,
+    loading,
+    resetFilters: () => setFilters(emptyFilters),
+  };
+}
