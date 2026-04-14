@@ -106,6 +106,7 @@ export function useDeals() {
 
   return {
     deals: paginatedDeals,
+    filteredDeals: filtered,
     allDeals: deals,
     totalFiltered: filtered.length,
     filters,
