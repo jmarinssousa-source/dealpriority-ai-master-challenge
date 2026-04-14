@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      deals: {
+        Row: {
+          account: string | null
+          created_at: string
+          deal_stage: string | null
+          id: string
+          manager: string | null
+          opportunity_id: string | null
+          positive_factor_1: string | null
+          positive_factor_2: string | null
+          priority_label: string | null
+          priority_score: number
+          product: string | null
+          recommended_action: string | null
+          regional_office: string | null
+          risk_factor_1: string | null
+          risk_factor_2: string | null
+          sales_agent: string | null
+        }
+        Insert: {
+          account?: string | null
+          created_at?: string
+          deal_stage?: string | null
+          id?: string
+          manager?: string | null
+          opportunity_id?: string | null
+          positive_factor_1?: string | null
+          positive_factor_2?: string | null
+          priority_label?: string | null
+          priority_score?: number
+          product?: string | null
+          recommended_action?: string | null
+          regional_office?: string | null
+          risk_factor_1?: string | null
+          risk_factor_2?: string | null
+          sales_agent?: string | null
+        }
+        Update: {
+          account?: string | null
+          created_at?: string
+          deal_stage?: string | null
+          id?: string
+          manager?: string | null
+          opportunity_id?: string | null
+          positive_factor_1?: string | null
+          positive_factor_2?: string | null
+          priority_label?: string | null
+          priority_score?: number
+          product?: string | null
+          recommended_action?: string | null
+          regional_office?: string | null
+          risk_factor_1?: string | null
+          risk_factor_2?: string | null
+          sales_agent?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import Papa from "papaparse";
+import { supabase } from "@/integrations/supabase/client";
 import type { Deal } from "@/types/deal";
 
 export interface Filters {
@@ -31,19 +31,38 @@ export function useDeals() {
   const [pageSize, setPageSize] = useState(25);
 
   useEffect(() => {
-    Papa.parse("/data/ranked_open_deals_final.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete(results) {
-        const parsed = (results.data as Record<string, string>[]).map((r) => ({
-          ...r,
-          priority_score: parseFloat(r.priority_score) || 0,
-        })) as Deal[];
-        setDeals(parsed);
-        setLoading(false);
-      },
-    });
+    async function fetchDeals() {
+      // Fetch all deals (paginate if > 1000)
+      let allRows: Deal[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
+
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("deals")
+          .select("*")
+          .range(from, from + batchSize - 1);
+
+        if (error) {
+          console.error("Error fetching deals:", error);
+          break;
+        }
+
+        if (data) {
+          allRows = [...allRows, ...(data as unknown as Deal[])];
+          hasMore = data.length === batchSize;
+          from += batchSize;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      setDeals(allRows);
+      setLoading(false);
+    }
+
+    fetchDeals();
   }, []);
 
   const filterOptions = useMemo(() => {

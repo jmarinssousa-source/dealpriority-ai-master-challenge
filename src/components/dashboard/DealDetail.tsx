@@ -1,4 +1,4 @@
-import { X, TrendingUp, AlertTriangle, Lightbulb, Building2, User, MapPin, Package, Layers, Calendar, Hash, DollarSign } from "lucide-react";
+import { X, TrendingUp, AlertTriangle, Lightbulb, Building2, User, MapPin, Package, Layers, Hash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PriorityBadge } from "./PriorityBadge";
 import type { Deal } from "@/types/deal";
@@ -58,8 +58,7 @@ export function DealDetail({ deal: d, onClose }: Props) {
             <InfoItem icon={MapPin} label="Região" value={d.regional_office} />
             <InfoItem icon={Package} label="Produto" value={d.product} />
             <InfoItem icon={Layers} label="Estágio" value={d.deal_stage} />
-            <InfoItem icon={Calendar} label="Engajamento" value={d.engage_date} />
-            {d.close_value && <InfoItem icon={DollarSign} label="Valor" value={d.close_value} />}
+            {/* engage_date and close_value removed — not in DB */}
           </div>
         </div>
 
@@ -74,7 +73,7 @@ export function DealDetail({ deal: d, onClose }: Props) {
               <span className="text-[11px] font-semibold text-success uppercase tracking-widest">Pontos Fortes</span>
             </div>
             <div className="space-y-2">
-              {[d.top_positive_reason_1, d.top_positive_reason_2].filter(Boolean).map((r, i) => (
+              {[d.positive_factor_1, d.positive_factor_2].filter(Boolean).map((r, i) => (
                 <div key={i} className="flex items-start gap-3 rounded-lg bg-success-muted/60 border border-success/10 p-3">
                   <div className="h-1.5 w-1.5 rounded-full bg-success mt-1.5 shrink-0" />
                   <span className="text-sm text-foreground leading-relaxed">{r}</span>
@@ -92,7 +91,7 @@ export function DealDetail({ deal: d, onClose }: Props) {
               <span className="text-[11px] font-semibold text-destructive uppercase tracking-widest">Riscos Identificados</span>
             </div>
             <div className="space-y-2">
-              {[d.top_risk_reason_1, d.top_risk_reason_2].filter(Boolean).map((r, i) => (
+              {[d.risk_factor_1, d.risk_factor_2].filter(Boolean).map((r, i) => (
                 <div key={i} className="flex items-start gap-3 rounded-lg bg-destructive/5 border border-destructive/10 p-3">
                   <div className="h-1.5 w-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />
                   <span className="text-sm text-foreground leading-relaxed">{r}</span>
