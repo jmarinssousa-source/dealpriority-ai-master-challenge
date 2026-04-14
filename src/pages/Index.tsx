@@ -5,7 +5,7 @@ import { FiltersBar } from "@/components/dashboard/FiltersBar";
 import { DealsTable } from "@/components/dashboard/DealsTable";
 import { DealDetail } from "@/components/dashboard/DealDetail";
 import type { Deal } from "@/types/deal";
-import { BarChart3 } from "lucide-react";
+import { Crosshair } from "lucide-react";
 
 export default function Index() {
   const {
@@ -27,7 +27,7 @@ export default function Index() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-3">
           <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-sm text-muted-foreground">Carregando oportunidades...</p>
+          <p className="text-sm text-muted-foreground">Carregando pipeline...</p>
         </div>
       </div>
     );
@@ -35,24 +35,28 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-40">
-        <div className="container max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
-            <BarChart3 className="h-5 w-5 text-primary-foreground" />
+      {/* Header — Product branding */}
+      <header className="bg-header text-header-foreground">
+        <div className="container max-w-[1440px] mx-auto px-6 py-5 flex items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center">
+            <Crosshair className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-foreground leading-tight">
-              Priorização de Oportunidades
+          <div className="flex-1">
+            <h1 className="text-xl font-bold tracking-tight leading-tight">
+              DealPriority
             </h1>
-            <p className="text-xs text-muted-foreground">
-              Identifique e priorize os deals com maior potencial de conversão
+            <p className="text-sm text-header-muted mt-0.5">
+              Inteligência de priorização para operações comerciais
             </p>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 text-xs text-header-muted">
+            <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse" />
+            {allDeals.length} oportunidades ativas
           </div>
         </div>
       </header>
 
-      <main className="container max-w-7xl mx-auto px-4 py-6 space-y-6">
+      <main className="container max-w-[1440px] mx-auto px-6 py-6 space-y-5">
         <KPICards deals={allDeals} />
         <FiltersBar
           filters={filters}
@@ -69,11 +73,11 @@ export default function Index() {
         />
       </main>
 
-      {/* Overlay */}
+      {/* Detail panel overlay */}
       {selected && (
         <>
           <div
-            className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-foreground/30 backdrop-blur-sm z-40 transition-opacity"
             onClick={() => setSelected(null)}
           />
           <DealDetail deal={selected} onClose={() => setSelected(null)} />
