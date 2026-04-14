@@ -59,20 +59,22 @@ export default function Index() {
           </div>
           <div className="hidden sm:flex items-center gap-2 text-xs text-header-muted">
             <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse" />
-            {allDeals.length} oportunidades ativas
+            {totalFiltered === allDeals.length
+              ? `${allDeals.length} oportunidades ativas`
+              : `${totalFiltered} de ${allDeals.length} oportunidades`}
           </div>
         </div>
       </header>
 
       <main className="container max-w-[1440px] mx-auto px-6 py-6 space-y-5">
-        <KPICards deals={allDeals} />
-        <ChartsSection deals={filteredDeals} />
         <FiltersBar
           filters={filters}
           setFilters={setFilters}
           options={filterOptions}
           resetFilters={resetFilters}
         />
+        <KPICards deals={filteredDeals} />
+        <ChartsSection deals={filteredDeals} />
         <DealsTable
           deals={deals}
           sortAsc={sortAsc}
