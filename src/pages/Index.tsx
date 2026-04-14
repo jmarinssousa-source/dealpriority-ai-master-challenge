@@ -12,6 +12,7 @@ export default function Index() {
   const {
     deals,
     allDeals,
+    filteredDeals,
     totalFiltered,
     filters,
     setFilters,
