@@ -1,6 +1,14 @@
 # DealPriority
 ### Inteligência de priorização para operações comerciais
 
+## Acesso rápido
+
+**Demo online:**  
+https://opportunity-focus-hub.lovable.app/auth
+
+
+> Para avaliação, acesse a demo online no link acima.
+
 ---
 
 ## 1. Visão Geral
@@ -419,13 +427,14 @@ O processo não foi linear. Envolveu iterações, validações intermediárias, 
 
 ## 17. Observação sobre Deploy
 
-A aplicação **não possui URL pública** nesta versão.
+A aplicação possui uma URL pública para fins de avaliação:
 
-Essa foi uma decisão deliberada: como se trata de um challenge com prazo definido, o foco foi priorizar a qualidade do produto, a robustez da lógica de scoring, a usabilidade da interface, a segurança e a documentação.
+**Demo online:**  
+https://opportunity-focus-hub.lovable.app/auth
 
-Manter a aplicação publicada em produção geraria custos recorrentes sem retorno direto para o contexto de avaliação.
+A publicação foi disponibilizada para facilitar o acesso ao produto durante a avaliação do challenge.
 
-A arquitetura da solução permite deploy futuro sem mudanças estruturais — basta configurar o ambiente de destino e o pipeline de publicação.
+Caso necessário, o ambiente pode ser evoluído futuramente com domínio próprio, pipeline de deploy dedicado e configurações adicionais de produção.
 
 ---
 
@@ -436,6 +445,12 @@ O **DealPriority** entrega o que o challenge propõe: um software funcional que 
 As escolhas feitas ao longo do projeto — heurística em vez de ML, produto interativo em vez de notebook, recalibração operacional, explicabilidade por deal, autenticação básica — refletem critério de produto, não simplificação. Cada decisão foi tomada com o objetivo de entregar algo utilizável, compreensível e demonstrável dentro do escopo do desafio.
 
 As limitações estão documentadas com transparência. Os próximos passos mostram o caminho natural de evolução para um produto de produção.
+
+## Como acessar
+
+1. Abra a demo online
+2. Faça login, se solicitado
+3. Explore filtros, KPIs, gráficos e detalhes dos deals
 
 ---
 
