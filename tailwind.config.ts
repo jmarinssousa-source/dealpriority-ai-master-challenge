@@ -71,6 +71,19 @@ export default {
           "nurture-bg": "hsl(var(--priority-nurture-bg))",
           low: "hsl(var(--priority-low))",
           "low-bg": "hsl(var(--priority-low-bg))",
+          "focus-border": "hsl(var(--priority-focus-border))",
+          "nurture-border": "hsl(var(--priority-nurture-border))",
+          "low-border": "hsl(var(--priority-low-border))",
+        },
+        header: {
+          DEFAULT: "hsl(var(--header-bg))",
+          foreground: "hsl(var(--header-foreground))",
+          muted: "hsl(var(--header-muted))",
+        },
+        score: {
+          high: "hsl(var(--score-high))",
+          mid: "hsl(var(--score-mid))",
+          low: "hsl(var(--score-low))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

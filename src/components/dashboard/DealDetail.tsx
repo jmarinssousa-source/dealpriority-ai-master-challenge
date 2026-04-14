@@ -1,4 +1,4 @@
-import { X, TrendingUp, AlertTriangle, CheckCircle, Lightbulb } from "lucide-react";
+import { X, TrendingUp, AlertTriangle, Lightbulb, Building2, User, MapPin, Package, Layers, Calendar, Hash, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PriorityBadge } from "./PriorityBadge";
 import type { Deal } from "@/types/deal";
@@ -8,96 +8,124 @@ interface Props {
   onClose: () => void;
 }
 
-export function DealDetail({ deal, onClose }: Props) {
-  const d = deal;
-  const pct = Math.min(d.priority_score, 100);
+export function DealDetail({ deal: d, onClose }: Props) {
+  const scoreColor =
+    d.priority_score >= 40 ? "text-primary" : d.priority_score >= 25 ? "text-warning" : "text-muted-foreground";
+  const scoreBg =
+    d.priority_score >= 40 ? "from-primary/5 to-primary/10" : d.priority_score >= 25 ? "from-warning/5 to-warning/10" : "from-muted/30 to-muted/50";
 
   return (
     <div className="fixed inset-y-0 right-0 w-full max-w-md bg-card border-l shadow-2xl z-50 animate-slide-in-right flex flex-col">
-      <div className="flex items-center justify-between px-6 py-4 border-b">
-        <h2 className="text-lg font-bold text-foreground">Detalhes da Oportunidade</h2>
-        <Button variant="ghost" size="icon" onClick={onClose}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-4 border-b bg-muted/30">
+        <div>
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Oportunidade</p>
+          <h2 className="text-base font-bold text-foreground mt-0.5">{d.account || d.opportunity_id}</h2>
+        </div>
+        <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-muted">
           <X className="h-5 w-5" />
         </Button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto">
         {/* Score Hero */}
-        <div className="rounded-lg bg-accent p-5 text-center space-y-3">
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <div className={`mx-6 mt-6 rounded-xl bg-gradient-to-br ${scoreBg} p-6 text-center space-y-3 border`}>
+          <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
             Priority Score
           </span>
-          <div className="text-4xl font-bold text-primary">{d.priority_score.toFixed(1)}</div>
-          <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
-            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+          <div className={`text-5xl font-extrabold tracking-tight ${scoreColor}`}>
+            {d.priority_score.toFixed(1)}
           </div>
-          <PriorityBadge label={d.priority_label} className="text-sm px-3 py-1" />
+          <div className="w-full h-2 rounded-full bg-background overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${
+                d.priority_score >= 40 ? "bg-primary" : d.priority_score >= 25 ? "bg-warning" : "bg-muted-foreground"
+              }`}
+              style={{ width: `${Math.min(d.priority_score, 100)}%` }}
+            />
+          </div>
+          <PriorityBadge label={d.priority_label} size="md" />
         </div>
 
-        {/* Info Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            ["ID", d.opportunity_id],
-            ["Conta", d.account || "—"],
-            ["Vendedor", d.sales_agent],
-            ["Gestor", d.manager],
-            ["Região", d.regional_office],
-            ["Produto", d.product],
-            ["Estágio", d.deal_stage],
-            ["Data Engajamento", d.engage_date],
-            ["Valor Fechamento", d.close_value || "—"],
-          ].map(([label, value]) => (
-            <div key={label} className="space-y-1">
-              <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-                {label}
-              </span>
-              <p className="text-sm font-medium text-foreground">{value}</p>
+        {/* Info */}
+        <div className="px-6 pt-6 pb-4">
+          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-3">Informações do Deal</p>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+            <InfoItem icon={Hash} label="ID" value={d.opportunity_id} />
+            <InfoItem icon={Building2} label="Conta" value={d.account || "—"} />
+            <InfoItem icon={User} label="Vendedor" value={d.sales_agent} />
+            <InfoItem icon={User} label="Gestor" value={d.manager} />
+            <InfoItem icon={MapPin} label="Região" value={d.regional_office} />
+            <InfoItem icon={Package} label="Produto" value={d.product} />
+            <InfoItem icon={Layers} label="Estágio" value={d.deal_stage} />
+            <InfoItem icon={Calendar} label="Engajamento" value={d.engage_date} />
+            {d.close_value && <InfoItem icon={DollarSign} label="Valor" value={d.close_value} />}
+          </div>
+        </div>
+
+        {/* Sections */}
+        <div className="px-6 space-y-4 pb-8">
+          {/* Positive */}
+          <section>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-6 w-6 rounded-md bg-success-muted flex items-center justify-center">
+                <TrendingUp className="h-3.5 w-3.5 text-success" />
+              </div>
+              <span className="text-[11px] font-semibold text-success uppercase tracking-widest">Pontos Fortes</span>
             </div>
-          ))}
-        </div>
+            <div className="space-y-2">
+              {[d.top_positive_reason_1, d.top_positive_reason_2].filter(Boolean).map((r, i) => (
+                <div key={i} className="flex items-start gap-3 rounded-lg bg-success-muted/60 border border-success/10 p-3">
+                  <div className="h-1.5 w-1.5 rounded-full bg-success mt-1.5 shrink-0" />
+                  <span className="text-sm text-foreground leading-relaxed">{r}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        {/* Positive Reasons */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-success">
-            <CheckCircle className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Pontos Positivos</span>
-          </div>
-          <div className="space-y-2">
-            {[d.top_positive_reason_1, d.top_positive_reason_2].filter(Boolean).map((r, i) => (
-              <div key={i} className="flex items-start gap-2 rounded-md bg-accent/50 p-3">
-                <TrendingUp className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                <span className="text-sm text-foreground">{r}</span>
+          {/* Risks */}
+          <section>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-6 w-6 rounded-md bg-destructive/10 flex items-center justify-center">
+                <AlertTriangle className="h-3.5 w-3.5 text-destructive" />
               </div>
-            ))}
-          </div>
-        </div>
+              <span className="text-[11px] font-semibold text-destructive uppercase tracking-widest">Riscos Identificados</span>
+            </div>
+            <div className="space-y-2">
+              {[d.top_risk_reason_1, d.top_risk_reason_2].filter(Boolean).map((r, i) => (
+                <div key={i} className="flex items-start gap-3 rounded-lg bg-destructive/5 border border-destructive/10 p-3">
+                  <div className="h-1.5 w-1.5 rounded-full bg-destructive mt-1.5 shrink-0" />
+                  <span className="text-sm text-foreground leading-relaxed">{r}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        {/* Risk Reasons */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Riscos Identificados</span>
-          </div>
-          <div className="space-y-2">
-            {[d.top_risk_reason_1, d.top_risk_reason_2].filter(Boolean).map((r, i) => (
-              <div key={i} className="flex items-start gap-2 rounded-md bg-destructive/5 p-3">
-                <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-                <span className="text-sm text-foreground">{r}</span>
+          {/* Action */}
+          <section>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-6 w-6 rounded-md bg-accent flex items-center justify-center">
+                <Lightbulb className="h-3.5 w-3.5 text-primary" />
               </div>
-            ))}
-          </div>
+              <span className="text-[11px] font-semibold text-primary uppercase tracking-widest">Ação Recomendada</span>
+            </div>
+            <div className="rounded-lg border-2 border-primary/15 bg-accent p-4">
+              <p className="text-sm font-medium text-foreground leading-relaxed">{d.recommended_action}</p>
+            </div>
+          </section>
         </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* Recommended Action */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-primary">
-            <Lightbulb className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Ação Recomendada</span>
-          </div>
-          <div className="rounded-md border-2 border-primary/20 bg-accent p-4">
-            <p className="text-sm font-medium text-foreground">{d.recommended_action}</p>
-          </div>
-        </div>
+function InfoItem({ icon: Icon, label, value }: { icon: typeof Hash; label: string; value: string }) {
+  return (
+    <div className="flex items-start gap-2">
+      <Icon className="h-3.5 w-3.5 text-muted-foreground mt-0.5 shrink-0" />
+      <div className="min-w-0">
+        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
+        <p className="text-sm font-medium text-foreground truncate">{value}</p>
       </div>
     </div>
   );
