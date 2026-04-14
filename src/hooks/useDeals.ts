@@ -27,6 +27,8 @@ export function useDeals() {
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [sortAsc, setSortAsc] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
 
   useEffect(() => {
     Papa.parse("/data/ranked_open_deals_final.csv", {
@@ -56,6 +58,11 @@ export function useDeals() {
       priority_label: unique("priority_label"),
     };
   }, [deals]);
+
+  // Reset to page 1 when filters or sort change
+  useEffect(() => {
+    setPage(1);
+  }, [filters, sortAsc]);
 
   const filtered = useMemo(() => {
     let result = deals;
@@ -93,9 +100,14 @@ export function useDeals() {
     return result;
   }, [deals, filters, sortAsc]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const paginatedDeals = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+
   return {
-    deals: filtered,
+    deals: paginatedDeals,
     allDeals: deals,
+    totalFiltered: filtered.length,
     filters,
     setFilters,
     sortAsc,
@@ -103,5 +115,10 @@ export function useDeals() {
     filterOptions,
     loading,
     resetFilters: () => setFilters(emptyFilters),
+    page: safePage,
+    setPage,
+    pageSize,
+    setPageSize: (size: number) => { setPageSize(size); setPage(1); },
+    totalPages,
   };
 }

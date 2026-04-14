@@ -1,5 +1,12 @@
-import { ArrowUpDown, ChevronRight } from "lucide-react";
+import { ArrowUpDown, ChevronRight, ChevronsLeft, ChevronLeft, ChevronRight as ChevronRightIcon, ChevronsRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PriorityBadge } from "./PriorityBadge";
 import type { Deal } from "@/types/deal";
 
@@ -9,6 +16,12 @@ interface Props {
   onToggleSort: () => void;
   onSelect: (d: Deal) => void;
   selected?: Deal | null;
+  page: number;
+  totalPages: number;
+  totalFiltered: number;
+  pageSize: number;
+  onPageChange: (p: number) => void;
+  onPageSizeChange: (s: number) => void;
 }
 
 function ScorePill({ score }: { score: number }) {
@@ -24,7 +37,7 @@ function ScorePill({ score }: { score: number }) {
   );
 }
 
-export function DealsTable({ deals, sortAsc, onToggleSort, onSelect, selected }: Props) {
+export function DealsTable({ deals, sortAsc, onToggleSort, onSelect, selected, page, totalPages, totalFiltered, pageSize, onPageChange, onPageSizeChange }: Props) {
   return (
     <div className="bg-card rounded-xl border shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
@@ -91,10 +104,44 @@ export function DealsTable({ deals, sortAsc, onToggleSort, onSelect, selected }:
           </tbody>
         </table>
       </div>
-      <div className="px-5 py-3 border-t bg-muted/30 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">
-          Exibindo <span className="font-semibold text-foreground">{deals.length}</span> oportunidade{deals.length !== 1 ? "s" : ""}
-        </span>
+
+      {/* Pagination footer */}
+      <div className="px-5 py-3 border-t bg-muted/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-muted-foreground">Linhas por página</span>
+          <Select value={String(pageSize)} onValueChange={(v) => onPageSizeChange(Number(v))}>
+            <SelectTrigger className="h-8 w-[70px] text-xs bg-background">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {[10, 25, 50, 100].map((s) => (
+                <SelectItem key={s} value={String(s)}>{s}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <span className="text-xs text-muted-foreground">
+            <span className="font-semibold text-foreground">{totalFiltered}</span> resultado{totalFiltered !== 1 ? "s" : ""}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <span className="text-xs text-muted-foreground mr-2">
+            Página <span className="font-semibold text-foreground">{page}</span> de{" "}
+            <span className="font-semibold text-foreground">{totalPages}</span>
+          </span>
+          <Button variant="outline" size="icon" className="h-8 w-8" disabled={page <= 1} onClick={() => onPageChange(1)}>
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" className="h-8 w-8" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" className="h-8 w-8" disabled={page >= totalPages} onClick={() => onPageChange(page + 1)}>
+            <ChevronRightIcon className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" className="h-8 w-8" disabled={page >= totalPages} onClick={() => onPageChange(totalPages)}>
+            <ChevronsRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

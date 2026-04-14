@@ -11,6 +11,7 @@ export default function Index() {
   const {
     deals,
     allDeals,
+    totalFiltered,
     filters,
     setFilters,
     sortAsc,
@@ -18,6 +19,11 @@ export default function Index() {
     filterOptions,
     loading,
     resetFilters,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalPages,
   } = useDeals();
 
   const [selected, setSelected] = useState<Deal | null>(null);
@@ -70,6 +76,12 @@ export default function Index() {
           onToggleSort={() => setSortAsc(!sortAsc)}
           onSelect={setSelected}
           selected={selected}
+          page={page}
+          totalPages={totalPages}
+          totalFiltered={totalFiltered}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
         />
       </main>
 
