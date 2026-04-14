@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useDeals } from "@/hooks/useDeals";
+import { useAuth } from "@/hooks/useAuth";
 import { KPICards } from "@/components/dashboard/KPICards";
 import { ChartsSection } from "@/components/dashboard/ChartsSection";
 import { FiltersBar } from "@/components/dashboard/FiltersBar";
 import { DealsTable } from "@/components/dashboard/DealsTable";
 import { DealDetail } from "@/components/dashboard/DealDetail";
+import { Button } from "@/components/ui/button";
 import type { Deal } from "@/types/deal";
-import { Crosshair } from "lucide-react";
+import { Crosshair, LogOut } from "lucide-react";
 
 export default function Index() {
   const {
