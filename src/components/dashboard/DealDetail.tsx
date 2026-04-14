@@ -1,4 +1,4 @@
-import { X, TrendingUp, AlertTriangle, Lightbulb, Building2, User, MapPin, Package, Layers, Calendar, Hash, DollarSign } from "lucide-react";
+import { X, TrendingUp, AlertTriangle, Lightbulb, Building2, User, MapPin, Package, Layers, Hash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PriorityBadge } from "./PriorityBadge";
 import type { Deal } from "@/types/deal";
