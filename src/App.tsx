@@ -21,6 +21,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      <InstallPrompt />
     </TooltipProvider>
   </QueryClientProvider>
 );
