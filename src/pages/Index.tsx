@@ -60,11 +60,16 @@ export default function Index() {
               Inteligência de priorização para operações comerciais
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs text-header-muted">
-            <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse" />
-            {totalFiltered === allDeals.length
-              ? `${allDeals.length} oportunidades ativas`
-              : `${totalFiltered} de ${allDeals.length} oportunidades`}
+          <div className="hidden sm:flex items-center gap-3 text-xs text-header-muted">
+            <span className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse" />
+              {totalFiltered === allDeals.length
+                ? `${allDeals.length} oportunidades ativas`
+                : `${totalFiltered} de ${allDeals.length} oportunidades`}
+            </span>
+            <Button variant="ghost" size="sm" onClick={signOut} className="h-7 text-xs text-header-muted hover:text-header-foreground hover:bg-white/10">
+              <LogOut className="h-3.5 w-3.5 mr-1" /> Sair
+            </Button>
           </div>
         </div>
       </header>
