@@ -66,6 +66,7 @@ export default function Index() {
 
       <main className="container max-w-[1440px] mx-auto px-6 py-6 space-y-5">
         <KPICards deals={allDeals} />
+        <ChartsSection deals={filteredDeals} />
         <FiltersBar
           filters={filters}
           setFilters={setFilters}
