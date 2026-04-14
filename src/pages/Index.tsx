@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDeals } from "@/hooks/useDeals";
 import { KPICards } from "@/components/dashboard/KPICards";
+import { ChartsSection } from "@/components/dashboard/ChartsSection";
 import { FiltersBar } from "@/components/dashboard/FiltersBar";
 import { DealsTable } from "@/components/dashboard/DealsTable";
 import { DealDetail } from "@/components/dashboard/DealDetail";
@@ -11,6 +12,7 @@ export default function Index() {
   const {
     deals,
     allDeals,
+    filteredDeals,
     totalFiltered,
     filters,
     setFilters,
@@ -64,6 +66,7 @@ export default function Index() {
 
       <main className="container max-w-[1440px] mx-auto px-6 py-6 space-y-5">
         <KPICards deals={allDeals} />
+        <ChartsSection deals={filteredDeals} />
         <FiltersBar
           filters={filters}
           setFilters={setFilters}
