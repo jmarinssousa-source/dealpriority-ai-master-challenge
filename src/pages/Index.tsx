@@ -11,6 +11,7 @@ import type { Deal } from "@/types/deal";
 import { Crosshair, LogOut } from "lucide-react";
 
 export default function Index() {
+  const { signOut } = useAuth();
   const {
     deals,
     allDeals,
