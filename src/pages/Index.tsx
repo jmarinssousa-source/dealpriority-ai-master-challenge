@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDeals } from "@/hooks/useDeals";
 import { KPICards } from "@/components/dashboard/KPICards";
+import { ChartsSection } from "@/components/dashboard/ChartsSection";
 import { FiltersBar } from "@/components/dashboard/FiltersBar";
 import { DealsTable } from "@/components/dashboard/DealsTable";
 import { DealDetail } from "@/components/dashboard/DealDetail";
